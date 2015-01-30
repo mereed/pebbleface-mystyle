@@ -77,6 +77,13 @@ if (options === null) options = { "use_gps" : "true",
 								  "background" : "false",
 								  "background2" : "false",
 								  "background3" : "false",
+								  "background4" : "false",
+								  "background5" : "false",
+								  "date2" : "false",
+								  "hidew" : "false",
+								  "bigtext" : "false",
+								  "hidebt" : "false",
+								  "hidebatt" : "false",
 								  "hourlyvibe" : "false"};
 
 function getWeatherFromLatLong(latitude, longitude) {
@@ -156,6 +163,13 @@ function getWeatherFromWoeid(woeid) {
             "background" : (options["background"] == "true" ? 1 : 0),
             "background2" : (options["background2"] == "true" ? 1 : 0),
             "background3" : (options["background3"] == "true" ? 1 : 0),
+            "background4" : (options["background4"] == "true" ? 1 : 0),
+            "background5" : (options["background5"] == "true" ? 1 : 0),
+            "date2" : (options["date2"] == "true" ? 1 : 0),
+            "hidew" : (options["hidew"] == "true" ? 1 : 0),
+            "bigtext" : (options["bigtext"] == "true" ? 1 : 0),
+            "hidebt" : (options["hidebt"] == "true" ? 1 : 0),
+            "hidebatt" : (options["hidebatt"] == "true" ? 1 : 0),
             "hourlyvibe" : (options["hourlyvibe"] == "true" ? 1 : 0),
 		  });
         }
@@ -188,12 +202,12 @@ function locationError(err) {
   console.warn('location error (' + err.code + '): ' + err.message);
   Pebble.sendAppMessage({
     "icon":11,
-    "temperature":"999"
+    "temperature":"   "
   });
 }
 
 Pebble.addEventListener('showConfiguration', function(e) {
-  var uri = 'http://www.themapman.com/pebblewatch/mystyle.html?' +
+  var uri = 'http://www.themapman.com/pebblewatch/mystyle3.html?' +
     'use_gps=' + encodeURIComponent(options['use_gps']) +
     '&location=' + encodeURIComponent(options['location']) +
     '&units=' + encodeURIComponent(options['units']) +
@@ -203,7 +217,14 @@ Pebble.addEventListener('showConfiguration', function(e) {
 	'&hidesec=' + encodeURIComponent(options['hidesec']) +
     '&background=' + encodeURIComponent(options['background']) +
     '&background2=' + encodeURIComponent(options['background2']) +
-    '&background3=' + encodeURIComponent(options['background3']);
+    '&background3=' + encodeURIComponent(options['background3']) +
+    '&background4=' + encodeURIComponent(options['background4']) +
+    '&background5=' + encodeURIComponent(options['background5']) +
+    '&date2=' + encodeURIComponent(options['date2']) +
+    '&hidew=' + encodeURIComponent(options['hidew']) +
+    '&bigtext=' + encodeURIComponent(options['bigtext']) +
+    '&hidebt=' + encodeURIComponent(options['hidebt']) +
+    '&hidebatt=' + encodeURIComponent(options['hidebatt']);
 	//console.log('showing configuration at uri: ' + uri);
 
   Pebble.openURL(uri);
@@ -226,6 +247,6 @@ Pebble.addEventListener("ready", function(e) {
   setInterval(function() {
     //console.log("timer fired");
     updateWeather();
-  }, 1800000); // 30 minutes
+  }, 1200000); // 20 minutes
   console.log(e.type);
 });

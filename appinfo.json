@@ -3,8 +3,15 @@
         "background": 6,
         "background2": 7,
         "background3": 8,
+        "background4": 9,
+        "background5": 10,
+        "bigtext": 13,
         "bluetoothvibe": 4,
+        "date2": 11,
+        "hidebatt": 15,
+        "hidebt": 14,
         "hidesec": 3,
+        "hidew": 12,
         "hourlyvibe": 5,
         "icon": 0,
         "invert_color": 2,
@@ -19,6 +26,22 @@
     "resources": {
         "media": [
             {
+                "characterRegex": "[r a]",
+                "file": "fonts/webs_by_malre.ttf",
+                "name": "FONT_SYM_18",
+                "type": "font"
+            },
+            {
+                "file": "images/25 (1).png",
+                "name": "BLANK",
+                "type": "png"
+            },
+            {
+                "file": "images/mystyle-bg4.png",
+                "name": "IMAGE_BACKGROUND4",
+                "type": "png"
+            },
+            {
                 "file": "images/bacKC.png",
                 "name": "IMAGE_BACKGROUND3",
                 "type": "png"
@@ -32,11 +55,6 @@
                 "file": "images/download (46) copy menu icon.png",
                 "menuIcon": true,
                 "name": "IMAGE_MENU_ICON",
-                "type": "png"
-            },
-            {
-                "file": "images/digds-bton.png",
-                "name": "IMAGE_BLUETOOTH",
                 "type": "png"
             },
             {
@@ -55,59 +73,15 @@
                 "type": "png"
             },
             {
-                "file": "images/dotx-date-9.png",
-                "name": "IMAGE_DATENUM_9",
-                "type": "png"
-            },
-            {
-                "file": "images/dotx-date-8.png",
-                "name": "IMAGE_DATENUM_8",
-                "type": "png"
-            },
-            {
-                "file": "images/dotx-date-7.png",
-                "name": "IMAGE_DATENUM_7",
-                "type": "png"
-            },
-            {
-                "file": "images/dotx-date-6.png",
-                "name": "IMAGE_DATENUM_6",
-                "type": "png"
-            },
-            {
-                "file": "images/dotx-date-5.png",
-                "name": "IMAGE_DATENUM_5",
-                "type": "png"
-            },
-            {
-                "file": "images/dotx-date-4.png",
-                "name": "IMAGE_DATENUM_4",
-                "type": "png"
-            },
-            {
-                "file": "images/dotx-date-3.png",
-                "name": "IMAGE_DATENUM_3",
-                "type": "png"
-            },
-            {
-                "file": "images/dotx-date-2.png",
-                "name": "IMAGE_DATENUM_2",
-                "type": "png"
-            },
-            {
-                "file": "images/dotx-date-1.png",
-                "name": "IMAGE_DATENUM_1",
-                "type": "png"
-            },
-            {
-                "file": "images/dotx-date-0.png",
-                "name": "IMAGE_DATENUM_0",
-                "type": "png"
-            },
-            {
                 "file": "fonts/tama_mini01.ttf",
                 "name": "FONT_CUSTOM_14",
                 "trackingAdjust": -1,
+                "type": "font"
+            },
+            {
+                "file": "fonts/tama_mini01.ttf",
+                "name": "FONT_CUSTOM_26",
+                "trackingAdjust": -4,
                 "type": "font"
             },
             {
@@ -280,7 +254,7 @@
     "shortName": "MyStyle",
     "uuid": "3a770c6b-2bbc-44e2-bb28-ad8736a30497",
     "versionCode": 1,
-    "versionLabel": "1.0",
+    "versionLabel": "1.2",
     "watchapp": {
         "watchface": true
     }
