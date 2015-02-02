@@ -39,9 +39,9 @@ enum WeatherKey {
   WEATHER_ICON_KEY = 0x0,
   WEATHER_TEMPERATURE_KEY = 0x1,
   INVERT_COLOR_KEY = 0x2,
-  HIDE_SEC_KEY = 0x3,
-  BLUETOOTHVIBE_KEY = 0x4,
-  HOURLYVIBE_KEY = 0x5,
+  BLUETOOTHVIBE_KEY = 0x3,
+  HOURLYVIBE_KEY = 0x4,
+  HIDE_SEC_KEY = 0x5,
   BACKGROUND_KEY = 0x6,
   BACKGROUND2_KEY = 0x7,
   BACKGROUND3_KEY = 0x8,
@@ -51,7 +51,8 @@ enum WeatherKey {
   HIDEW_KEY = 0xC,
   TEXT_KEY = 0xD,
   HIDEBT_KEY = 0xE,
-  HIDEBATT_KEY = 0xF
+  HIDEBATT_KEY = 0xF,
+  BACKGROUND6_KEY = 0x10
 };
 
 static bool appStarted = false;
@@ -64,6 +65,8 @@ static int background;
 static int background2;
 static int background3;
 static int background4;
+//static int background5;
+static int background6;
 static int textcol;
 static int date2;
 static int hidew;
@@ -78,17 +81,14 @@ static Layer *window_layer;
 
 int cur_day = -1;
 
-//TextLayer *layer_wday_text;
-
 static GFont *date_font;
 static GFont *bt_font;
+static GFont *bigdate_font;
+
 TextLayer *layer_date_text;
 TextLayer *layer_date_text2;
-TextLayer *layer_secs_text;
 
-static GFont *bigdate_font;
-TextLayer *layer_bigdate_text;
-TextLayer *layer_bigdate_text2;
+TextLayer *layer_secs_text;
 TextLayer *layer_bigsecs_text;
 
 static GBitmap *background_image;
@@ -103,8 +103,11 @@ static BitmapLayer *background_layer3;
 static GBitmap *background_image4;
 static BitmapLayer *background_layer4;
 
-static GBitmap *background_image5;
-static BitmapLayer *background_layer5;
+//static GBitmap *background_image5;
+//static BitmapLayer *background_layer5;
+
+static GBitmap *background_image6;
+static BitmapLayer *background_layer6;
 
 BitmapLayer *icon_layer;
 GBitmap *icon_bitmap = NULL;
@@ -112,26 +115,10 @@ TextLayer *temp_layer;
 
 TextLayer *battery_text_layer;
 TextLayer *bttext;
-TextLayer *bigbattery_text_layer;
-TextLayer *bigbttext;
 int charge_percent = 0;
 
 static GBitmap *separator_image;
 static BitmapLayer *separator_layer;
-
-//static GBitmap *day_name_image;
-//static BitmapLayer *day_name_layer;
-/*
-const int DAY_NAME_IMAGE_RESOURCE_IDS[] = {
-  RESOURCE_ID_IMAGE_DAY_NAME_SUN,
-  RESOURCE_ID_IMAGE_DAY_NAME_MON,
-  RESOURCE_ID_IMAGE_DAY_NAME_TUE,
-  RESOURCE_ID_IMAGE_DAY_NAME_WED,
-  RESOURCE_ID_IMAGE_DAY_NAME_THU,
-  RESOURCE_ID_IMAGE_DAY_NAME_FRI,
-  RESOURCE_ID_IMAGE_DAY_NAME_SAT
-};
-*/
 
 #define TOTAL_TIME_DIGITS 4
 static GBitmap *time_digits_images[TOTAL_TIME_DIGITS];
@@ -151,88 +138,26 @@ const int TINY_IMAGE_RESOURCE_IDS[] = {
 };
 
 InverterLayer *inverter_layer = NULL;
+InverterLayer *inverter_layer2 = NULL;
 
 
 void text_color (bool textcol) {
 	
 		if (textcol) {
     			text_layer_set_text_color(bttext, GColorWhite);
-    			text_layer_set_text_color(bigbttext, GColorWhite);
     			text_layer_set_text_color(layer_date_text, GColorWhite);
-    			text_layer_set_text_color(layer_bigdate_text, GColorWhite);
-			    text_layer_set_text_color(layer_date_text2, GColorWhite);
-			    text_layer_set_text_color(layer_bigdate_text2, GColorWhite);
+				text_layer_set_text_color(layer_date_text2, GColorWhite);
 			    text_layer_set_text_color(battery_text_layer, GColorWhite);
 			    text_layer_set_text_color(layer_secs_text, GColorWhite);
-			    text_layer_set_text_color(layer_bigsecs_text, GColorWhite);
 							
 		} else {
     			text_layer_set_text_color(bttext, GColorBlack);
-    			text_layer_set_text_color(bigbttext, GColorBlack);
     			text_layer_set_text_color(layer_date_text, GColorBlack);
-    			text_layer_set_text_color(layer_bigdate_text, GColorBlack);
-			    text_layer_set_text_color(layer_date_text2, GColorBlack);
-			    text_layer_set_text_color(layer_bigdate_text2, GColorBlack);
+				text_layer_set_text_color(layer_date_text2, GColorBlack);
 			    text_layer_set_text_color(battery_text_layer, GColorBlack);
 			    text_layer_set_text_color(layer_secs_text, GColorBlack);	
-			    text_layer_set_text_color(layer_bigsecs_text, GColorBlack);	
 		}	
 }
-
-void size (bool bigtext) {
-	
-	
-		if (bigtext) {
-					  		layer_set_hidden(text_layer_get_layer(layer_date_text), true);			
-					  		layer_set_hidden(text_layer_get_layer(layer_date_text2), true);
-					  		layer_set_hidden(text_layer_get_layer(layer_secs_text), true);
-					  		layer_set_hidden(text_layer_get_layer(bttext), true);
-			
-					  		layer_set_hidden(text_layer_get_layer(bigbttext), false);
-
-		}  else {
-					  		layer_set_hidden(text_layer_get_layer(layer_bigdate_text), true);			
-					  		layer_set_hidden(text_layer_get_layer(layer_bigdate_text2), true);
-					  		layer_set_hidden(text_layer_get_layer(layer_bigsecs_text), true);
-					  		layer_set_hidden(text_layer_get_layer(bigbttext), true);
-			
-					  		layer_set_hidden(text_layer_get_layer(bttext), false);
-		}	
-}
-
-void date_format (bool date2) {
-	
-		  if (date2) {
-		  		layer_set_hidden(text_layer_get_layer(layer_date_text), true);
-		  		layer_set_hidden(text_layer_get_layer(layer_date_text2), false);
-			  
-			  	layer_set_hidden(text_layer_get_layer(layer_bigdate_text), true);
-		  		layer_set_hidden(text_layer_get_layer(layer_bigdate_text2), false);
-			  
-	  } else {
-	  		  	layer_set_hidden(text_layer_get_layer(layer_date_text2), true);
-		  		layer_set_hidden(text_layer_get_layer(layer_date_text), false);
-			  
-				layer_set_hidden(text_layer_get_layer(layer_bigdate_text2), true);
-		  		layer_set_hidden(text_layer_get_layer(layer_bigdate_text), false);  
-	  }
-}
-
-static void handle_tick(struct tm *tick_time, TimeUnits units_changed);
-
-void secs (bool hidesec) {
-	
-		if (hidesec) {
-		    layer_set_hidden(text_layer_get_layer(layer_secs_text), true);
-		    layer_set_hidden(text_layer_get_layer(layer_bigsecs_text), true);
-	  	    tick_timer_service_subscribe(MINUTE_UNIT, handle_tick);
-		}  else {
-			layer_set_hidden(text_layer_get_layer(layer_secs_text), false);
-			layer_set_hidden(text_layer_get_layer(layer_bigsecs_text), false);
-			tick_timer_service_subscribe(SECOND_UNIT, handle_tick);
-		}
-}
-
 
 void set_invert_color(bool invert) {
   if (invert && inverter_layer == NULL) {
@@ -250,6 +175,7 @@ void set_invert_color(bool invert) {
   // No action required
 }
 
+static void handle_tick(struct tm *tick_time, TimeUnits units_changed);
 
 static void sync_tuple_changed_callback(const uint32_t key,
                                         const Tuple* new_tuple,
@@ -281,7 +207,14 @@ static void sync_tuple_changed_callback(const uint32_t key,
 	case HIDE_SEC_KEY:
       hidesec = new_tuple->value->uint8 != 0;
 	  persist_write_bool(HIDE_SEC_KEY, hidesec);
-	  secs(hidesec);
+	
+		if(hidesec) {
+		    layer_set_hidden(text_layer_get_layer(layer_secs_text), true);
+	  	    tick_timer_service_subscribe(MINUTE_UNIT, handle_tick);
+		}  else {
+			layer_set_hidden(text_layer_get_layer(layer_secs_text), false);
+			tick_timer_service_subscribe(SECOND_UNIT, handle_tick);
+		}
 	break; 
 
     case BLUETOOTHVIBE_KEY:
@@ -302,7 +235,6 @@ static void sync_tuple_changed_callback(const uint32_t key,
 		} else {
 			layer_set_hidden(bitmap_layer_get_layer(background_layer), false);	
 		}
-
 	break; 
 
     case BACKGROUND2_KEY:
@@ -339,12 +271,76 @@ static void sync_tuple_changed_callback(const uint32_t key,
 	  textcol = new_tuple->value->uint8 != 0;
 	  persist_write_bool(BACKGROUND5_KEY, textcol);
 	  text_color(textcol);
-	break; 
+ 
+   case BACKGROUND6_KEY:
+	  background6 = new_tuple->value->uint8 != 0;
+	  persist_write_bool(BACKGROUND5_KEY, background6);
+
+		if (background6) {
+			layer_set_hidden(bitmap_layer_get_layer(background_layer6), true);
+		} else {
+			layer_set_hidden(bitmap_layer_get_layer(background_layer6), false);	
+		}
+	break;
+	  
+	case TEXT_KEY:
+      bigtext = new_tuple->value->uint8 != 0;
+	  persist_write_bool(TEXT_KEY, bigtext);
+	 /*
+	  if (bigtext) {
+		  
+					  		layer_set_hidden(text_layer_get_layer(layer_date_text), true);			
+					  		
+		  					layer_set_hidden(text_layer_get_layer(layer_bigdate_text), false);			
+		  
+		  					layer_set_hidden(text_layer_get_layer(bttext), true);
+					  		layer_set_hidden(text_layer_get_layer(bigbttext), false);
+		  
+		  					layer_set_hidden(text_layer_get_layer(battery_text_layer), true);
+					  		layer_set_hidden(text_layer_get_layer(battery_text_layer2), false);
+		  
+		}  else  {
+					  		layer_set_hidden(text_layer_get_layer(layer_date_text), false);
+		  
+		  					layer_set_hidden(text_layer_get_layer(layer_bigdate_text), true);			
+		  
+					  		layer_set_hidden(text_layer_get_layer(bttext), false);
+		  					layer_set_hidden(text_layer_get_layer(bigbttext), true);
+
+		  		  			layer_set_hidden(text_layer_get_layer(battery_text_layer2), true);
+					  		layer_set_hidden(text_layer_get_layer(battery_text_layer), false);
+		  
+	  }
+	*/ 
+	  
+   if (bigtext && inverter_layer2 == NULL) {
+    // Add inverter layer
+    Layer *window_layer = window_get_root_layer(window);
+
+    inverter_layer2 = inverter_layer_create(GRect(4, 51, 139, 82));
+    layer_add_child(window_layer, inverter_layer_get_layer(inverter_layer2));
+  } else if (!bigtext && inverter_layer2 != NULL) {
+    // Remove Inverter layer
+    layer_remove_from_parent(inverter_layer_get_layer(inverter_layer2));
+    inverter_layer_destroy(inverter_layer2);
+    inverter_layer2 = NULL;
+  }
+	  
+	break;
 	  
 	case DATE2_KEY:
       date2 = new_tuple->value->uint8 != 0;
 	  persist_write_bool(DATE2_KEY, date2);	 
-	  date_format(date2);
+	  
+		  if (date2) {
+		  		layer_set_hidden(text_layer_get_layer(layer_date_text), true);
+		  		layer_set_hidden(text_layer_get_layer(layer_date_text2), false);
+			  			  
+	  } else {
+	  		  	layer_set_hidden(text_layer_get_layer(layer_date_text2), true);
+		  		layer_set_hidden(text_layer_get_layer(layer_date_text), false);
+	  }
+	 
    break;
 	  
 	case HIDEW_KEY:
@@ -353,30 +349,23 @@ static void sync_tuple_changed_callback(const uint32_t key,
       if (hidew) {
 			layer_set_hidden(bitmap_layer_get_layer(icon_layer), true);
 			layer_set_hidden(text_layer_get_layer(temp_layer), true);
-			layer_set_hidden(bitmap_layer_get_layer(background_layer5), false);
+			//layer_set_hidden(bitmap_layer_get_layer(background_layer5), false);
 	  } else {
 			layer_set_hidden(bitmap_layer_get_layer(icon_layer), false);	
 			layer_set_hidden(text_layer_get_layer(temp_layer), false);
-			layer_set_hidden(bitmap_layer_get_layer(background_layer5), true);
+			//layer_set_hidden(bitmap_layer_get_layer(background_layer5), true);
 	  }
 	break;
-	  
-    case TEXT_KEY:
-      bigtext = new_tuple->value->uint8 != 0;
-	  persist_write_bool(TEXT_KEY, bigtext);
-      size(bigtext);
-	break;
-	  
+	  	  
     case HIDEBT_KEY:
 	  hidebt = new_tuple->value->uint8 != 0;
 	  persist_write_bool(HIDEBT_KEY, hidebt);
       if (hidebt) {
 			layer_set_hidden(text_layer_get_layer(bttext), true);
-			layer_set_hidden(text_layer_get_layer(bigbttext), true);
 	  } else {
-			//ayer_set_hidden(text_layer_get_layer(bttext), false);
-			//layer_set_hidden(text_layer_get_layer(bigbttext), false);
+			layer_set_hidden(text_layer_get_layer(bttext), false);		  
 	  }
+	  
 	break;
 	  
 	case HIDEBATT_KEY:
@@ -385,7 +374,7 @@ static void sync_tuple_changed_callback(const uint32_t key,
       if (hidebatt) {
 			layer_set_hidden(text_layer_get_layer(battery_text_layer), true);
 	  } else {
-			layer_set_hidden(text_layer_get_layer(battery_text_layer), false);
+		  	layer_set_hidden(text_layer_get_layer(battery_text_layer), false);
 	  }
 	break;
   }
@@ -424,12 +413,10 @@ void handle_bluetooth(bool connected) {
 		static char bt_text[] = "x";  
 	    snprintf(bt_text, sizeof(bt_text), "a");
 	    text_layer_set_text(bttext, bt_text);
-	    text_layer_set_text(bigbttext, bt_text);
 	} else {
 		static char bt_text[] = "x";
         snprintf(bt_text, sizeof(bt_text), "r");
         text_layer_set_text(bttext, bt_text);
-        text_layer_set_text(bigbttext, bt_text);
 	}
 
     if (appStarted && bluetoothvibe) {     
@@ -465,8 +452,6 @@ static void update_month (struct tm *tick_time) {
 	
    	text_layer_set_text(layer_date_text, date_text);
 	text_layer_set_text(layer_date_text2, date_text2);
-	text_layer_set_text(layer_bigdate_text, date_text);
-	text_layer_set_text(layer_bigdate_text2, date_text2);
 }
 
 static void update_hours(struct tm *tick_time) {
@@ -497,7 +482,6 @@ static void update_seconds(struct tm *tick_time) {
 
       strftime(secs_text, sizeof(secs_text), "%S", tick_time);
       text_layer_set_text(layer_secs_text, secs_text);
-      text_layer_set_text(layer_bigsecs_text, secs_text);
 }
 
 static void handle_tick(struct tm *tick_time, TimeUnits units_changed) {
@@ -553,7 +537,7 @@ static void init(void) {
 	
   background_image3 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND3);
   GRect frame1 = (GRect) {
-    .origin = { .x = 0, .y = 38 },
+    .origin = { .x = 0, .y = 50 },
     .size = background_image3->bounds.size
   };
   background_layer3 = bitmap_layer_create(frame1);
@@ -562,7 +546,7 @@ static void init(void) {
 	
   background_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND);
   GRect frame2 = (GRect) {
-    .origin = { .x = 7, .y = 39 },
+    .origin = { .x = 0, .y = 0 },
     .size = background_image->bounds.size
   };
   background_layer = bitmap_layer_create(frame2);
@@ -594,17 +578,16 @@ static void init(void) {
   Layer *weather_holder = layer_create(GRect(0, 0, 144, 168 ));
   layer_add_child(window_layer, weather_holder);
 	
-  icon_layer = bitmap_layer_create(GRect(4, 132, 100, 10));
+  icon_layer = bitmap_layer_create(GRect(4, 134, 100, 10));
   GCompOp compositing_mode1 = GCompOpOr;
   bitmap_layer_set_compositing_mode(icon_layer, compositing_mode1);
   layer_add_child(weather_holder, bitmap_layer_get_layer(icon_layer));
 
   date_font  = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CUSTOM_14 ) );
-  bigdate_font  = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CUSTOM_26 ) );
+  bigdate_font  = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CUSTOM_25 ) );
   bt_font =  fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_SYM_18 ) );
 	
-	
-  temp_layer = text_layer_create(GRect(97, 128, 44, 30));
+  temp_layer = text_layer_create(GRect(97, 130, 44, 30));
   text_layer_set_text_color(temp_layer, GColorWhite);
   text_layer_set_background_color(temp_layer, GColorClear);
   text_layer_set_font(temp_layer,fonts_get_system_font(FONT_KEY_GOTHIC_28));
@@ -613,70 +596,42 @@ static void init(void) {
   layer_add_child(weather_holder, text_layer_get_layer(temp_layer));
 	
 	
-	layer_date_text = text_layer_create(GRect(0, 36, 140, 22));
+	layer_date_text = text_layer_create(GRect(5, 25, 140, 30));
     text_layer_set_background_color(layer_date_text, GColorClear);
     text_layer_set_text_color(layer_date_text, GColorWhite);
     text_layer_set_text_alignment(layer_date_text, GTextAlignmentRight);
-    text_layer_set_font(layer_date_text, date_font);
+    text_layer_set_font(layer_date_text, bigdate_font);
     layer_add_child(window_layer, text_layer_get_layer(layer_date_text));
 	
-	layer_date_text2 = text_layer_create(GRect(0, 36, 140, 22));
+	layer_date_text2 = text_layer_create(GRect(5, 25, 140, 30));
     text_layer_set_background_color(layer_date_text2, GColorClear);
     text_layer_set_text_color(layer_date_text2, GColorWhite);
     text_layer_set_text_alignment(layer_date_text2, GTextAlignmentRight);
-    text_layer_set_font(layer_date_text2, date_font);
-    layer_add_child(window_layer, text_layer_get_layer(layer_date_text2));
+    text_layer_set_font(layer_date_text2, bigdate_font);
+    layer_add_child(window_layer, text_layer_get_layer(layer_date_text2));	
 	
-    layer_secs_text = text_layer_create(GRect(62, 36, 142, 22));
+    layer_secs_text = text_layer_create(GRect(10, 36, 142, 22));
     text_layer_set_background_color(layer_secs_text, GColorClear);
     text_layer_set_text_color(layer_secs_text, GColorWhite);
     text_layer_set_text_alignment(layer_secs_text, GTextAlignmentLeft);
     text_layer_set_font(layer_secs_text, date_font);
     layer_add_child(window_layer, text_layer_get_layer(layer_secs_text));
 	
-	battery_text_layer = text_layer_create(GRect(7, 36, 100, 22));
+	battery_text_layer = text_layer_create(GRect(44, 7, 100, 30));
     text_layer_set_background_color(battery_text_layer, GColorClear);
     text_layer_set_text_color(battery_text_layer, GColorWhite);
-    text_layer_set_text_alignment(battery_text_layer, GTextAlignmentLeft);
-    text_layer_set_font(battery_text_layer, date_font);
+    text_layer_set_text_alignment(battery_text_layer, GTextAlignmentRight);
+    text_layer_set_font(battery_text_layer, bigdate_font);
     layer_add_child(window_layer, text_layer_get_layer(battery_text_layer));
-	
-	bttext  = text_layer_create(GRect(43, 32, 20, 30));
+
+	bttext  = text_layer_create(GRect(32, 33, 20, 30));
 	text_layer_set_background_color(bttext, GColorClear);
     text_layer_set_text_color(bttext, GColorWhite);
 	text_layer_set_text_alignment(bttext, GTextAlignmentCenter);
     text_layer_set_font(bttext, bt_font);
     layer_add_child(window_layer, text_layer_get_layer(bttext));
 
-	
-	layer_bigdate_text = text_layer_create(GRect(0, 24, 143, 26));
-    text_layer_set_background_color(layer_bigdate_text, GColorClear);
-    text_layer_set_text_color(layer_bigdate_text, GColorWhite);
-    text_layer_set_text_alignment(layer_bigdate_text, GTextAlignmentRight);
-    text_layer_set_font(layer_bigdate_text, bigdate_font);
-    layer_add_child(window_layer, text_layer_get_layer(layer_bigdate_text));
-	
-	layer_bigdate_text2 = text_layer_create(GRect(0, 24, 143, 26));
-    text_layer_set_background_color(layer_bigdate_text2, GColorClear);
-    text_layer_set_text_color(layer_bigdate_text2, GColorWhite);
-    text_layer_set_text_alignment(layer_bigdate_text2, GTextAlignmentRight);
-    text_layer_set_font(layer_bigdate_text2, bigdate_font);
-    layer_add_child(window_layer, text_layer_get_layer(layer_bigdate_text2));
-	
-    layer_bigsecs_text = text_layer_create(GRect(92, 15, 31, 20));
-    text_layer_set_background_color(layer_bigsecs_text, GColorClear);
-    text_layer_set_text_color(layer_bigsecs_text, GColorWhite);
-    text_layer_set_text_alignment(layer_bigsecs_text, GTextAlignmentRight);
-    text_layer_set_font(layer_bigsecs_text, date_font);
-    layer_add_child(window_layer, text_layer_get_layer(layer_bigsecs_text));
-	
-	bigbttext  = text_layer_create(GRect(121, 11, 22, 30));
-	text_layer_set_background_color(bigbttext, GColorClear);
-    text_layer_set_text_color(bigbttext, GColorWhite);
-	text_layer_set_text_alignment(bigbttext, GTextAlignmentRight);
-    text_layer_set_font(bigbttext, bt_font);
-    layer_add_child(window_layer, text_layer_get_layer(bigbttext));
-	
+	/*
   background_image5 = gbitmap_create_with_resource(RESOURCE_ID_BLANK);
   GRect frame5 = (GRect) {
     .origin = { .x = 7, .y = 131 },
@@ -685,14 +640,11 @@ static void init(void) {
   background_layer5 = bitmap_layer_create(frame5);
   bitmap_layer_set_bitmap(background_layer5, background_image5);
   layer_add_child(window_layer, bitmap_layer_get_layer(background_layer5)); 	
-	
+	*/
   // Create time and date layers
    GRect dummy_frame = { {0, 0}, {0, 0} };
-/*   day_name_layer = bitmap_layer_create(dummy_frame);
-   GCompOp compositing_mode7 = GCompOpOr;
-   bitmap_layer_set_compositing_mode(day_name_layer, compositing_mode7);
-   layer_add_child(window_layer, bitmap_layer_get_layer(day_name_layer));	
-	*/
+
+	
     for (int i = 0; i < TOTAL_TIME_DIGITS; ++i) {
     time_digits_layers[i] = bitmap_layer_create(dummy_frame);
 	GCompOp compositing_mode3 = GCompOpOr;
@@ -701,18 +653,31 @@ static void init(void) {
     }
 	
 	
+  background_image6 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND6);
+  GRect frame6 = (GRect) {
+    .origin = { .x = 2, .y = 50 },
+    .size = background_image6->bounds.size
+  };
+  background_layer6 = bitmap_layer_create(frame6);
+  bitmap_layer_set_bitmap(background_layer6, background_image6);
+	GCompOp compositing_mode6 = GCompOpAnd;
+  bitmap_layer_set_compositing_mode(background_layer6, compositing_mode6);
+  layer_add_child(window_layer, bitmap_layer_get_layer(background_layer6)); 
+	
+	
 Tuplet initial_values[] = {
     TupletInteger(WEATHER_ICON_KEY, (uint8_t) 14),
     TupletCString(WEATHER_TEMPERATURE_KEY, ""),
     TupletInteger(INVERT_COLOR_KEY, persist_read_bool(INVERT_COLOR_KEY)),
-	TupletInteger(HIDE_SEC_KEY, persist_read_bool(HIDE_SEC_KEY)),
-    TupletInteger(HOURLYVIBE_KEY, persist_read_bool(HOURLYVIBE_KEY)),
     TupletInteger(BLUETOOTHVIBE_KEY, persist_read_bool(BLUETOOTHVIBE_KEY)),
+	TupletInteger(HOURLYVIBE_KEY, persist_read_bool(HOURLYVIBE_KEY)),
+	TupletInteger(HIDE_SEC_KEY, persist_read_bool(HIDE_SEC_KEY)),
     TupletInteger(BACKGROUND_KEY, persist_read_bool(BACKGROUND_KEY)),
     TupletInteger(BACKGROUND2_KEY, persist_read_bool(BACKGROUND2_KEY)),
     TupletInteger(BACKGROUND3_KEY, persist_read_bool(BACKGROUND3_KEY)),
     TupletInteger(BACKGROUND4_KEY, persist_read_bool(BACKGROUND4_KEY)),
     TupletInteger(BACKGROUND5_KEY, persist_read_bool(BACKGROUND5_KEY)),
+    TupletInteger(BACKGROUND6_KEY, persist_read_bool(BACKGROUND6_KEY)),
     TupletInteger(DATE2_KEY, persist_read_bool(DATE2_KEY)),
     TupletInteger(HIDEW_KEY, persist_read_bool(HIDEW_KEY)),
     TupletInteger(TEXT_KEY, persist_read_bool(TEXT_KEY)),
@@ -770,18 +735,19 @@ static void deinit(void) {
   gbitmap_destroy(background_image4);
   background_image4 = NULL;
 	
-  layer_remove_from_parent(bitmap_layer_get_layer(background_layer5));
-  bitmap_layer_destroy(background_layer5);
-  gbitmap_destroy(background_image5);
-  background_image5 = NULL;
+  //layer_remove_from_parent(bitmap_layer_get_layer(background_layer5));
+  //bitmap_layer_destroy(background_layer5);
+  //gbitmap_destroy(background_image5);
+  //background_image5 = NULL;
+	
+  layer_remove_from_parent(bitmap_layer_get_layer(background_layer6));
+  bitmap_layer_destroy(background_layer6);
+  gbitmap_destroy(background_image6);
+  background_image6 = NULL;
 	
   layer_remove_from_parent(bitmap_layer_get_layer(separator_layer));
   bitmap_layer_destroy(separator_layer);
   gbitmap_destroy(separator_image);
-	
-//  layer_remove_from_parent(bitmap_layer_get_layer(day_name_layer));
-//  bitmap_layer_destroy(day_name_layer);
-//  gbitmap_destroy(day_name_image);
 	
   layer_remove_from_parent(bitmap_layer_get_layer(icon_layer));
   bitmap_layer_destroy(icon_layer);
@@ -802,6 +768,7 @@ static void deinit(void) {
     } 
 
   fonts_unload_custom_font( date_font );
+  fonts_unload_custom_font( bigdate_font );
   fonts_unload_custom_font( bt_font );
 
   layer_remove_from_parent(window_layer);

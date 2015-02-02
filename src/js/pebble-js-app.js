@@ -73,18 +73,19 @@ if (options === null) options = { "use_gps" : "true",
                                   "units" : "fahrenheit",
                                   "invert_color" : "false",
 								  "bluetoothvibe" : "false",
+								  "hourlyvibe" : "false",
 								  "hidesec" : "false",
-								  "background" : "false",
-								  "background2" : "false",
-								  "background3" : "false",
-								  "background4" : "false",
-								  "background5" : "false",
+								  "background" : "true",
+								  "background2" : "true",
+								  "background3" : "true",
+								  "background4" : "true",
+								  "background5" : "true",
+								  "background6" : "true",
 								  "date2" : "false",
 								  "hidew" : "false",
 								  "bigtext" : "false",
 								  "hidebt" : "false",
-								  "hidebatt" : "false",
-								  "hourlyvibe" : "false"};
+								  "hidebatt" : "false"};
 
 function getWeatherFromLatLong(latitude, longitude) {
   var response;
@@ -159,18 +160,19 @@ function getWeatherFromWoeid(woeid) {
             "temperature" : temperature,
             "invert_color" : (options["invert_color"] == "true" ? 1 : 0),
 			"bluetoothvibe" : (options["bluetoothvibe"] == "true" ? 1 : 0),
+			"hourlyvibe" : (options["hourlyvibe"] == "true" ? 1 : 0),
             "hidesec" : (options["hidesec"] == "true" ? 1 : 0),
             "background" : (options["background"] == "true" ? 1 : 0),
             "background2" : (options["background2"] == "true" ? 1 : 0),
             "background3" : (options["background3"] == "true" ? 1 : 0),
             "background4" : (options["background4"] == "true" ? 1 : 0),
             "background5" : (options["background5"] == "true" ? 1 : 0),
+            "background6" : (options["background6"] == "true" ? 1 : 0),
             "date2" : (options["date2"] == "true" ? 1 : 0),
             "hidew" : (options["hidew"] == "true" ? 1 : 0),
             "bigtext" : (options["bigtext"] == "true" ? 1 : 0),
             "hidebt" : (options["hidebt"] == "true" ? 1 : 0),
             "hidebatt" : (options["hidebatt"] == "true" ? 1 : 0),
-            "hourlyvibe" : (options["hourlyvibe"] == "true" ? 1 : 0),
 		  });
         }
       } else {
@@ -207,7 +209,7 @@ function locationError(err) {
 }
 
 Pebble.addEventListener('showConfiguration', function(e) {
-  var uri = 'http://www.themapman.com/pebblewatch/mystyle3.html?' +
+  var uri = 'http://www.themapman.com/pebblewatch/mystyle5.html?' +
     'use_gps=' + encodeURIComponent(options['use_gps']) +
     '&location=' + encodeURIComponent(options['location']) +
     '&units=' + encodeURIComponent(options['units']) +
@@ -220,6 +222,7 @@ Pebble.addEventListener('showConfiguration', function(e) {
     '&background3=' + encodeURIComponent(options['background3']) +
     '&background4=' + encodeURIComponent(options['background4']) +
     '&background5=' + encodeURIComponent(options['background5']) +
+    '&background6=' + encodeURIComponent(options['background6']) +
     '&date2=' + encodeURIComponent(options['date2']) +
     '&hidew=' + encodeURIComponent(options['hidew']) +
     '&bigtext=' + encodeURIComponent(options['bigtext']) +
