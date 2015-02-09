@@ -476,6 +476,10 @@ void update_battery_state(BatteryChargeState charge_state) {
 
 void handle_bluetooth(bool connected) {
 
+	if (appStarted && bluetoothvibe) {     
+        vibes_short_pulse();
+	}
+	
 	if (connected) {
 		static char bt_text[] = "x";  
 	    snprintf(bt_text, sizeof(bt_text), "a");
@@ -484,13 +488,8 @@ void handle_bluetooth(bool connected) {
 		static char bt_text[] = "x";
         snprintf(bt_text, sizeof(bt_text), "r");
         text_layer_set_text(bttext, bt_text);
+		
 	}
-
-    if (appStarted && bluetoothvibe) {     
-        vibes_short_pulse();
-	}
-	
-	
 	
 	 if (btinv && !connected && inverter_layer_bt == NULL) {    
 	 
@@ -499,18 +498,11 @@ void handle_bluetooth(bool connected) {
 
     inverter_layer_bt = inverter_layer_create(GRect(0, 0, 144, 168));
     layer_add_child(window_layer, inverter_layer_get_layer(inverter_layer_bt));
-
-	 
-    } else {	
-
-		 
+    } else {		 
 	// Remove Inverter layer
     layer_remove_from_parent(inverter_layer_get_layer(inverter_layer_bt));
     inverter_layer_destroy(inverter_layer_bt);
     inverter_layer_bt = NULL;
-		 
-
-    vibes_short_pulse();
     }
 }
 

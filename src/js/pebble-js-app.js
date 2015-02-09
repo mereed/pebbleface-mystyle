@@ -74,12 +74,12 @@ if (options === null) options = { "use_gps" : "true",
                                   "invert_color" : "false",
 								  "bluetoothvibe" : "false",
 								  "hourlyvibe" : "false",
-								  "hidesec" : "true",
-								  "background" : "true",
+								  "hidesec" : "false",
+								  "background" : "false",
 								  "background2" : "false",
 								  "background3" : "false",
 								  "background4" : "false",
-								  "textcol" : "true",
+								  "textcol" : "false",
 								  "background6" : "false",
 								  "date2" : "false",
 								  "hidew" : "false",
@@ -217,7 +217,7 @@ function locationError(err) {
 }
 
 Pebble.addEventListener('showConfiguration', function(e) {
-  var uri = 'http://www.themapman.com/pebblewatch/mystyle6.html?' +
+  var uri = 'http://www.themapman.com/pebblewatch/mystyle7.html?' +
     'use_gps=' + encodeURIComponent(options['use_gps']) +
     '&location=' + encodeURIComponent(options['location']) +
     '&units=' + encodeURIComponent(options['units']) +

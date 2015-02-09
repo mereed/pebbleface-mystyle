@@ -226,7 +226,7 @@
     "shortName": "MyStyle",
     "uuid": "3a770c6b-2bbc-44e2-bb28-ad8736a30497",
     "versionCode": 1,
-    "versionLabel": "1.8",
+    "versionLabel": "1.9",
     "watchapp": {
         "watchface": true
     }
